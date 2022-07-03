@@ -83,6 +83,15 @@ class AjaxAutocompleteListFilter(admin.RelatedFieldListFilter):
             return field_desc.get_queryset()
         return related_model.objects.get_queryset()
 
+    def field_choices(self, field, request, model_admin):
+        """
+        Override this function for performance
+        This prevents the default method from making a query to get all the possible choices
+        We don't need to do this since we are getting a page at a time on the fly
+        Had to have at least 2 dummy objects to make all relations work
+        """
+        return [(1, 'dummy'), (2, 'dummy 2')]
+
 
 class AjaxAutocompleteListFilterModelAdmin(admin.ModelAdmin):
     def get_list_filter(self, request):
